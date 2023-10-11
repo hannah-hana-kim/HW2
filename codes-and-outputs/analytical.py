@@ -78,7 +78,6 @@ df['loan_default'] = df['status'].apply(lambda x: np.nan if pd.isna(x) else ('Tr
 trans_df = pd.read_csv("../data/transactions.csv")
 
 # return the maximum value of each account
-
 # maximum value of debit
 temp = trans_df[trans_df['type'] == 'debit'] # filter out
 temp.groupby('account_id')
@@ -89,6 +88,7 @@ max_with = pd.DataFrame(max_with)
 df = pd.merge(df, max_with, on='account_id', how='left')
 df.rename(columns = {'amount':'max_withdrawal'}, inplace=True)
 
+# MIN_WITHDRAWAL
 min_with = temp.groupby('account_id')['amount'].min()
 min_with = pd.DataFrame(min_with)
 
