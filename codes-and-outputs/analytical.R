@@ -87,11 +87,12 @@ colnames(min_withdrawal) <- c("account_id", "min_withdrawal")
 df <- merge(df, min_withdrawal, by="account_id", all.x=TRUE)
 
 ## CC payments
-temp <- trans_df[trans_df$type == 'debit' & trans_df$method == 'credit card', ]
-cc_payments <- aggregate(temp$amount, by=list(account_id=temp$account_id), FUN=length)
-colnames(cc_payments) <- c("account_id", "cc_payments")
+temp = trans_df[trans_df$type == "credit",]
+temp = temp %>% 
+  group_by(account_id) %>% 
+  summarize(cc_payments = length(amount))
 
-df <- merge(df, cc_payments, by="account_id", all.x=TRUE)
+df = merge(df, temp, by = "account_id", all.x = TRUE)
 
 # MAX BALANCE
 temp <- aggregate(balance ~ account_id, data = trans_df, FUN = max)
